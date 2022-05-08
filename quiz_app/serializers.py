@@ -10,6 +10,6 @@ class QuizSerializer(ModelSerializer):
         ModelSerializer
     """
     class Meta:
+        # todo: remove user_pk
         model = QuizModel
-        fields = ['question', 'answer', 'discussion']
-
+        fields = ['user_pk', 'question', 'answer', 'discussion']
