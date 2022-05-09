@@ -14,8 +14,8 @@ class QuizListView(APIView):
     def post(self, request):
         serializer = QuizSerializer(data=request.data)
         if serializer.is_valid():
-            # todo: save serializer with the current authenticated person
-            serializer.save()
+            if not QuizModel.objects.filter(question=serializer.validated_data['question']).exists():
+                serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
