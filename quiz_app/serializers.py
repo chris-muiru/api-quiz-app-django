@@ -1,15 +1,15 @@
 from dataclasses import fields
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from .models import QuizModel
 
 
-class QuizSerializer(ModelSerializer):
+class QuizSerializer(serializers.ModelSerializer):
     """
     Serializer to serialize fields from QuizModel
     Args:
         ModelSerializer
     """
+    user = serializers.ReadOnlyField(source='user.username')
     class Meta:
-        # todo: remove user_pk
         model = QuizModel
-        fields = ['user_pk', 'question', 'answer', 'discussion']
+        fields = ['id','user','question', 'answer','choices', 'discussion']
