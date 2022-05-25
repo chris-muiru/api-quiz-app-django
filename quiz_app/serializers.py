@@ -10,6 +10,10 @@ class QuizSerializer(serializers.ModelSerializer):
         ModelSerializer
     """
     user = serializers.ReadOnlyField(source='user.username')
+
     class Meta:
         model = QuizModel
-        fields = ['id','user','question', 'answer','choices', 'discussion']
+        fields = ['id', 'user', 'question', 'answer', 'choices', 'discussion']
+        extra_kwargs = {
+            'answer': {'write_only': True}
+        }
