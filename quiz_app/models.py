@@ -11,4 +11,11 @@ class QuizModel(models.Model):
 
     def __str__(self):
         return self.question
+
+
+class ScoreModel(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    total = models.IntegerField()
+    def __str__(self):
+        return f'{self.user} {self.total}'
 # Create your models here.
