@@ -13,7 +13,9 @@ class QuizSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuizModel
-        fields = ['id', 'user', 'question', 'answer', 'choices', 'discussion']
+        fields = ['id', 'user', 'question', 'answer',
+                  'choices', 'discussion', 'isCounted']
         extra_kwargs = {
-            'answer': {'write_only': True}
+            'answer': {'write_only': True},
+            'isCounted': {'read_only': True}
         }
