@@ -8,14 +8,14 @@ class QuizModel(models.Model):
     answer = models.CharField(max_length=255)
     choices = models.JSONField()
     discussion = models.CharField(max_length=255)
-
+    isCounted = models.BooleanField(default=False)
     def __str__(self):
         return self.question
 
 
 class ScoreModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    total = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    total = models.IntegerField(default=0)
     def __str__(self):
         return f'{self.user} {self.total}'
 # Create your models here.
