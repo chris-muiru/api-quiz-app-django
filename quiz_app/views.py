@@ -33,16 +33,18 @@ class QuizDetailsView(APIView):
         answer = request.data['answer']
         if query.answer == str(answer):
             if not ScoreModel.objects.filter(user__username=request.user).exists():
-                print('ok')
-                ScoreModel(user=request.user, total=1).save()
-
-            else:
-                instance = ScoreModel.objects.get(user__username=request.user)
-                instance.total = instance.total+1
+                instance = ScoreModel(user=request.user)
                 instance.save()
-            return Response({"status": "correct"})
+            scoreQueryInstance = ScoreModel.objects.get(
+                user__username=request.user)
         else:
             return Response({"status": "incorrect"})
+        if(query.isCounted == False):
+            scoreQueryInstance.total += 1
+            scoreQueryInstance.save()
+            query.isCounted = True
+            query.save()
+        return Response({"status": "correct"})
 
     def put(self, request, pk):
         query = QuizModel.objects.get(id=pk)
