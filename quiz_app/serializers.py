@@ -1,6 +1,6 @@
 from dataclasses import fields
 from rest_framework import serializers
-from .models import QuizModel
+from .models import QuizModel, ScoreModel
 
 
 class QuizSerializer(serializers.ModelSerializer):
@@ -19,3 +19,9 @@ class QuizSerializer(serializers.ModelSerializer):
             'answer': {'write_only': True},
             'isCounted': {'read_only': True}
         }
+
+
+class ScoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScoreModel
+        fields = ['total']
