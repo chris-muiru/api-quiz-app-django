@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework import status, request
 from rest_framework.response import Response
-from .serializers import QuizSerializer
+from .serializers import QuizSerializer, ScoreSerializer
 from .models import QuizModel, ScoreModel
 
 
@@ -37,14 +37,14 @@ class QuizDetailsView(APIView):
                 instance.save()
             scoreQueryInstance = ScoreModel.objects.get(
                 user__username=request.user)
+            if(query.isCounted == False):
+                scoreQueryInstance.total += 1
+                scoreQueryInstance.save()
+                query.isCounted = True
+                query.save()
+            return Response({"status": "correct"})
         else:
             return Response({"status": "incorrect"})
-        if(query.isCounted == False):
-            scoreQueryInstance.total += 1
-            scoreQueryInstance.save()
-            query.isCounted = True
-            query.save()
-        return Response({"status": "correct"})
 
     def put(self, request, pk):
         query = QuizModel.objects.get(id=pk)
@@ -57,4 +57,10 @@ class QuizDetailsView(APIView):
     def delete(self, request, pk):
         quiz = QuizModel.objects.get(id=pk).delete()
         return Response(status=status.HTTP_200_OK)
-# Create your views here.
+
+
+class ScoreView(APIView):
+    def get(self, request):
+        query = ScoreModel.objects.get(user__username=request.user)
+        serializer = ScoreSerializer(query)
+        return Response(serializer.data, status=status.HTTP_200_OK)
